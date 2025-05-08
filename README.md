@@ -1,7 +1,16 @@
 # AutoDubbing
 AutoDubbing uses AI to automatically generate foreign-language voice-overs for videos, dramatically simplifying content localization. 
 
-**FFmpeg** must be installed, with its executable path added to the system environment variables.
+
+## Pre-requisites
+
+Before beginning, ensure the following requirements are met:
+- **FFmpeg** must be installed, with its executable path added to the system environment variables.
+- You will need to create a `.env` file and add the following three keys, with `HUGGINGFACE_API_KEY` being mandatory:
+
+1. `OPENAI_API_KEY=""`
+2. `GPT_MODEL="gpt-4o-mini"`
+3. `HUGGINGFACE_API_KEY=""`
 
 
 ## Implementation Guide
