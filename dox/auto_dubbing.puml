@@ -1,0 +1,54 @@
+@startuml
+title: AutoDubbing: AI-Powered Video Localization & Subtitle Embedding
+
+start
+
+partition "Setup Directories" {
+  :Create video directory for output files;
+  :Create temporary audio folder;
+}
+
+partition "Audio Extraction" {
+  :Extract audio from video using audio_extractor;
+  :Save audio file to temporary directory;
+}
+
+partition "Audio Transcription" {
+  :Transcribe audio to text using transcribe_audio;
+  :Save transcription in SRT format;
+}
+
+partition "Translation" {
+  :Load translation model using load_translator;
+  :Translate transcription (SRT) from English to Bengali;
+  :Save translated SRT file;
+}
+
+partition "Translation Review" {
+  :Review translated SRT file using review_translation;
+  :Regenerate translated SRT if necessary;
+}
+
+partition "Text to Speech" {
+  :Generate dubbed audio from translated text using text_to_speech;
+  :Save dubbed audio file;
+}
+
+partition "Vocal Separation" {
+  :Separate vocals from background music using separate_vocals_with_demucs;
+  :Save separated vocals and no-vocals files;
+}
+
+partition "Generate Dubbed Audio" {
+  :Generate final dubbed audio by combining translated audio and no-vocals file;
+  :Save dubbed vocals audio file;
+}
+
+partition "Create Dubbed Video" {
+  :Create final dubbed video by combining original video, dubbed audio, and subtitles;
+  :Save dubbed video to output directory;
+}
+
+stop
+
+@enduml

@@ -1,0 +1,35 @@
+@startuml
+title Text to Speech
+
+start
+
+partition "Setup" {
+  :Create audio folder;
+  :Open diarization file;
+  :Load diarization data;
+}
+
+partition "Audio Generation" {
+  :For each subtitle in diarization;
+  :Calculate start time in seconds;
+  :Generate voice based on gender;
+  :Generate dubbed audio file;
+  :Remove silence from dubbed audio file;
+  :Check if audio duration changed;
+}
+
+partition "Speed Calculation" {
+  :Calculate speed based on start time and diarization;
+  :Set speed for dubbed audio file;
+  :Adjust speed if outside allowed range (0.8 - 1.3);
+}
+
+partition "Output" {
+  :Store speed and audio file path in diarization;
+  :Increment audio segment count;
+  :Write updated diarization data back to file;
+}
+
+stop
+
+@enduml

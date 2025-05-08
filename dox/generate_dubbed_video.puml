@@ -1,0 +1,34 @@
+@startuml
+title High-Level Workflow of create_dubbed_video Function
+
+start
+
+partition "Audio and Video Extraction" {
+  :Extract original audio from video using FFmpeg;
+  :Extract video without audio using FFmpeg;
+}
+
+partition "Progress Reporting (Optional)" {
+  :If progress callback is provided;
+  :Probe video duration using ffprobe;
+  :Report progress to callback;
+}
+
+partition "FFmpeg Command Preparation" {
+  :Prepare FFmpeg command with input video, dubbed audio, original audio, and subtitles;
+  :Set language and disposition tags for audio and subtitles;
+  :Specify output file format and codecs;
+}
+
+partition "Video Creation" {
+  :Run FFmpeg to create the final dubbed video;
+  :Report progress if callback is provided;
+}
+
+partition "Cleanup" {
+  :Remove temporary files (audio and video without sound);
+}
+
+stop
+
+@enduml

@@ -1,0 +1,25 @@
+@startuml
+title: Generate Dubbed Audio
+
+start
+
+partition "Setup" {
+  :Open diarization file;
+  :Load diarization data;
+  :Load background audio from no vocals path;
+}
+
+partition "Audio Overlay" {
+  :For each subtitle in diarization;
+  :Calculate start position for dubbed audio;
+  :Overlay dubbed audio onto background audio at the correct position;
+}
+
+partition "Output" {
+  :Export the final dubbed audio to a new file;
+  :Return the path of the dubbed audio file;
+}
+
+stop
+
+@enduml

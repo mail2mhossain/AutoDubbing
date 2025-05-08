@@ -1,0 +1,25 @@
+@startuml
+title Translation
+
+start
+
+partition "File Preparation" {
+  :Open .json file;
+  :Extract subtitle texts and clean them;
+}
+
+partition "Translation Pipeline" {
+  :Create Dataset for batch translation;
+  :Translate texts using model;
+  :Store translated text in subtitles;
+}
+
+partition "File Output" {
+  :Generate new SRT filename;
+  :Write translated subtitles to a new SRT file;
+  :Update original JSON file with translations;
+}
+
+stop
+
+@enduml

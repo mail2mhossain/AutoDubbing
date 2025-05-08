@@ -1,0 +1,37 @@
+@startuml
+title: Create Dubbed Video
+
+start
+
+partition "Extract Original Audio" {
+    :Run ffmpeg to extract original audio from the video;
+    :Save original audio as "temp_original_audio.aac";
+}
+
+partition "Extract Video Without Audio" {
+    :Run ffmpeg to extract video without audio;
+    :Save video as "temp_video_no_audio.mp4";
+}
+
+partition "Progress Reporting" {
+    :If progress callback is provided;
+    :Run ffprobe to get video duration;
+    :Report progress with callback (5% for preparing final video);
+}
+
+partition "Final Video Creation" {
+    :Run ffmpeg with video, audio, and subtitle files;
+    :Map video, Bengali audio, English audio, Bengali subtitles, and English subtitles;
+    :Apply codecs (libx264 for video, aac for audio, mov_text for subtitles);
+    :Set metadata and disposition for audio and subtitles;
+    :Run process with progress reporting (if callback exists);
+    :Generate output file with dubbed video and subtitles;
+}
+
+partition "Clean Up" {
+    :Clean up temporary audio and video files;
+}
+
+stop
+
+@enduml

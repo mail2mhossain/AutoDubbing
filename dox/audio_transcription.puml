@@ -1,0 +1,38 @@
+@startuml
+title: Audio Transcription 
+
+start
+
+:Extract audio from video;
+:Separate vocals using Demucs;
+
+partition "Speaker Diarization" {
+  :Detect speakers using pyannote.audio;
+  :Classify speaker gender;
+  :Segment audio by speaker turns;
+}
+
+partition "Speech Verification" {
+  :Verify speech segments with Silero VAD;
+  :Filter out non-speech segments;
+}
+
+partition "Transcription" {
+  :Transcribe verified segments with faster-whisper;
+  :Process each segment individually;
+}
+
+partition "Output Generation" {
+  :Generate SRT with timestamps;
+  :Save diarization as JSON;
+  :Save verified audio segments;
+}
+
+partition "Optimization" {
+  :Use GPU acceleration (if available);
+  :Log performance with timing decorators;
+}
+
+stop
+
+@enduml
