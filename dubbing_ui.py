@@ -911,6 +911,7 @@ class DubbingApp(QMainWindow):
         """Initialize directories for processing (Step 1)"""
         try:
             # Setup directories
+            print("Creating directories...")
             self.updateProgress(10, "Creating directories...")
             
             self.video_dir = create_video_directory(self.video_file)
@@ -923,6 +924,7 @@ class DubbingApp(QMainWindow):
     
     def extractAudio(self):
         """Extract audio from video (Step 2)"""
+        print("Extracting audio...")
         self.updateProgress(20, "Extracting audio...")
         
         # Set up paths
@@ -948,6 +950,7 @@ class DubbingApp(QMainWindow):
     
     def transcribeAudio(self):
         """Transcribe audio (Step 3)"""
+        print("Transcribing audio...")
         self.updateProgress(30, "Transcribing audio...")
         
         # Set up paths
@@ -978,6 +981,7 @@ class DubbingApp(QMainWindow):
     
     def translateText(self):
         """Translate text (Step 4)"""
+        print("Translating text...")
         self.updateProgress(40, "Translating text...")
         
         # Set up paths
@@ -1025,6 +1029,7 @@ class DubbingApp(QMainWindow):
     
     def reviewTranslation(self):
         """Review translation (Step 5)"""
+        print("ChatGPT Reviewing translation...")
         self.updateProgress(45, "ChatGPT Reviewing translation...")
         
         # ChatGPT Translation Review
@@ -1033,6 +1038,7 @@ class DubbingApp(QMainWindow):
         else:
             print("OPENAI_API_KEY is not set. Skipping translation review.")
         
+        print("Opening translation review...")
         self.updateProgress(50, "Opening translation review...")
         # Open translation review window
         self.review_window = TranslationReviewWindow(self.diarization_file, self)
@@ -1052,6 +1058,7 @@ class DubbingApp(QMainWindow):
     
     def textToSpeech(self):
         """Generate speech from text (Step 6)"""
+        print("Generating speech from text...")
         self.updateProgress(60, "Generating speech from text...")
         
         # Run in worker thread
@@ -1070,6 +1077,7 @@ class DubbingApp(QMainWindow):
     
     def separateVocals(self):
         """Separate vocals from audio (Step 7)"""
+        print("Separating vocals from audio...")
         self.updateProgress(70, "Separating vocals from audio...")
         
         demucs_output_dir = os.path.join(self.temp_audio_dir, "demucs_output")
@@ -1097,6 +1105,7 @@ class DubbingApp(QMainWindow):
     
     def generateDubbedAudio(self):
         """Generate dubbed audio (Step 8)"""
+        print("Generating dubbed audio...")
         self.updateProgress(80, "Generating dubbed audio...")
         
         # if os.path.exists(self.dubbed_vocals_audio_file):
@@ -1121,6 +1130,7 @@ class DubbingApp(QMainWindow):
     
     def createDubbedVideo(self):
         """Create dubbed video (Step 9)"""
+        print("Creating dubbed video...")
         self.updateProgress(90, "Creating dubbed video...")
         
         # Setup paths
@@ -1163,6 +1173,7 @@ class DubbingApp(QMainWindow):
     
     def finishProcess(self):
         """Finish the dubbing process"""
+        print("Dubbing process complete!")
         self.startButton.setEnabled(True)
         self.cancelButton.setEnabled(False)
         

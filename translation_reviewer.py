@@ -40,39 +40,46 @@ class DiarizationList(BaseModel):
     diarizations: List[Diarization] = Field(..., description="List of diarizations")
 
 def review_translation(diarization_file: str):
-    # 1. Load your API key
-    llm = ChatOpenAI(model_name=GPT_MODEL, temperature=0, openai_api_key=OPENAI_API_KEY)
-    llm_with_tool = llm.with_structured_output(DiarizationList)
-    # 2. Read the original JSON
-    with open(diarization_file, "r", encoding="utf-8") as f:
-        data = json.load(f)
+    try:
+        if OPENAI_API_KEY is None:
+            print("OPENAI_API_KEY is not set. Skipping translation review.")
+            return
+        print("ChatGPT Started Reviewing translation...")
+        # 1. Load your API key
+        llm = ChatOpenAI(model_name=GPT_MODEL, temperature=0, openai_api_key=OPENAI_API_KEY)
+        llm_with_tool = llm.with_structured_output(DiarizationList)
+        # 2. Read the original JSON
+        with open(diarization_file, "r", encoding="utf-8") as f:
+            data = json.load(f)
 
-    # 3. Build a prompt that includes the JSON
-    #    (If your file is large, you may need to send it in chunks.)
-    prompt_template = """
-    I’m going to send you a JSON array of video segments, each with a field "translated_text".
-    Please rewrite every "translated_text" into simple, plain Bengali suitable for a seventh-grade student,
-    translate you as তুমি, তোমরা as appropriate,
-    spelling out any numeric values in words, and then return the entire JSON array with only that field updated.
-    Here is the data:
-    {json_data}
-    """
+        # 3. Build a prompt that includes the JSON
+        #    (If your file is large, you may need to send it in chunks.)
+        prompt_template = """
+        I’m going to send you a JSON array of video segments, each with a field "translated_text".
+        Please rewrite every "translated_text" into simple, plain Bengali suitable for a seventh-grade student,
+        translate you as তুমি, তোমরা as appropriate,
+        spelling out any numeric values in words, and then return the entire JSON array with only that field updated.
+        Here is the data:
+        {json_data}
+        """
 
-    prompt = PromptTemplate(
-        template=prompt_template,
-        input_variables=["json_data"]
-    )
+        prompt = PromptTemplate(
+            template=prompt_template,
+            input_variables=["json_data"]
+        )
 
-    chain = prompt | llm_with_tool
+        chain = prompt | llm_with_tool
 
-    response = chain.invoke({"json_data": json.dumps(data, ensure_ascii=False, indent=2)})
-    print(f"✅ Response type: {type(response)}")
-    updated_data = response.dict()["diarizations"]
+        response = chain.invoke({"json_data": json.dumps(data, ensure_ascii=False, indent=2)})
+        print(f"✅ Response type: {type(response)}")
+        updated_data = response.dict()["diarizations"]
 
-    with open(diarization_file, "w", encoding="utf-8") as f:
-        json.dump(updated_data, f, ensure_ascii=False, indent=2)
+        with open(diarization_file, "w", encoding="utf-8") as f:
+            json.dump(updated_data, f, ensure_ascii=False, indent=2)
 
-    print(f"✅ Updated JSON saved to {diarization_file}")
+        print(f"✅ Updated JSON saved to {diarization_file}")
+    except Exception as e:
+        print(f"Error reviewing translation: {e}")
 
 
 def review_translation_using_llama(diarization_file: str):
